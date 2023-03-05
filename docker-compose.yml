@@ -1,0 +1,33 @@
+version: "3.8"
+volumes:
+  postgres_data:
+    external: false
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: app/Dockerfile
+    command: python ./mysite/manage.py runserver 0.0.0.0:8000
+    env_file:
+        - .env
+
+#    command: bash
+    tty: true
+    ports:
+      - 8000:8000
+    volumes:
+      - ./app:/usr/src/app:rw
+
+#      args:
+#        DEBIAN_FRONTEND: noninteractive
+#        BASE_DIR: /usr/src/app/
+  postgres:
+    build: ./postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+        - "127.0.0.1:5431:5432"
+    env_file:
+        - .env
