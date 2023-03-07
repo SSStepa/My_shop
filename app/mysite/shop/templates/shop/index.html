@@ -1,0 +1,22 @@
+
+<body>
+    <h2>Page number: {{ page_list.number }}</h2>
+    {% for product in page_list %}
+        <div class="product-item">
+            <br>
+            <strong>Product: {{ product.name }}</strong><br>
+            <strong>Prise:</strong> {{ product.price }}$
+            <h4>Description:</h4> {{ product.description }}
+            <hr>
+        </div>
+    {% endfor %}
+    <div class="page-links">
+        {% if page_list.has_previous %}
+            <a href="{% url 'shop:index_previous' number=page_list.previous_page_number %}">Previous page</a>
+        {% endif %}
+        {% if page_list.has_next %}
+            <a href="{% url 'shop:index_next' number=page_list.next_page_number %}">Next page</a>
+        {% endif %}
+    </div>
+    </body>
+
