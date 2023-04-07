@@ -1,27 +1,105 @@
-{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load mptt_tags %}
 <body>
-    {% for product in page_obj %}
-        <div class="product-item">
-            <br>
-            <strong>Product: {{ product.name }}</strong><br>
-            <strong>Prise:</strong> {{ product.price }}$
-            <h4>Description:</h4> {{ product.description }}<br><br>
-            <img src="{{ product.img.url }}" width="350" height="255" alt="No image">
-            <hr>
+    <br>
+    <div class="container-fluid">
+        <div class="container"><!-- Menu -->
         </div>
-    {% endfor %}
-    <div class="page-links">
-
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            ...
-            <a href="?page={{ page_obj.previous_page_number }}">previous &nbsp;</a>
-        {% endif %}
-        this page({{ page_obj.number }}) &nbsp;
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next </a>
-            ...
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
+        <br>
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+                    {% if cotegories_breadcrumb %}
+                        {% for cotegory in cotegories_breadcrumb %}
+                            <li class="breadcrumb-item"><a href="{% url 'shop:index' cotegory_id=cotegory.id %}">{{ cotegory.name }}</a></li>
+                        {% endfor %} 
+                    {% endif %}
+                </ol>
+            </nav> 
+         </div>
+         <br>
     </div>
-    </body>
+    <br>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <aside class="bd-sidebar">
+                        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; background-color:rgb(53, 47, 47);">
+                            <ul class="nav nav-pills flex-column sm-auto">
+                              <li class="nav-item">
+                                <a href="{% url 'shop:home' %}" class="nav-link active" aria-current="page">
+                                  Home
+                                </a>
+                              </li>
+                              <li>
+                                <ul>
+                                    {% recursetree cotegories %}
+                                        <li>
+                                            <a href="{% url 'shop:index' cotegory_id=node.id %}" class="nav-link text-white">
+                                                {{ node.name }}
+                                            </a>
+                                            {% if not node.is_leaf_node %}
+                                                <ul class="children">
+                                                    {{ children }}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endrecursetree %}
+                                </ul>
+                                </a>
+                              </li>
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-7">
+                    {% for product in page.object_list %}
+                        <div class="card" style="width: 30rem; background-color: rgb(215, 240, 240);">
+                            <img src="{{ product.img.url }}" class="card-img-top" height="300" alt="No image">
+                            <div class="card-body">
+                                <h1 class="card-title">{{ product.name }}</h1>
+                                <p class="card-text">
+                                    <ul>
+                                        <li><strong>Prise:</strong> {{ product.price }}$ <br></li>
+                                        <li><strong>Cast:</strong> {{ product.cast }}</li>
+                                        <li><strong>Time:</strong> {{ product.time }}</li>
+                                        <li><strong>Description:</strong> {{ product.description }}</li>
+                                    </ul>
+                                </p>
+                                <a href="{% url 'shop:detail' product_id=product.id %}" class="btn btn-primary">More infarmation</a>
+                            </div>
+                        </div><br>
+                    {% endfor %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if page.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                {% if page.previous_page_number != 1 %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a></li>
+                                    <li class="page-item"><a class="page-link" href="">...</a></li>
+                                {% endif %}
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page.number }}">this page({{ page.number }})</a></li>
+                            {% if page.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Next</a></li>
+                                {% if page.next_page_number != page.paginator.num_pages %}
+                                    <li class="page-item"><a class="page-link" href="">...</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ page.paginator.num_pages }}">Last</a></li> 
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+    <h1>footer</h1>
+    </div>
+</body>
