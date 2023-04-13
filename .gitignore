@@ -14,3 +14,4 @@ build/
 files/
 migrations/
 node_modules/
+.env
