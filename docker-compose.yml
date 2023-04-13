@@ -22,11 +22,15 @@ services:
 #        DEBIAN_FRONTEND: noninteractive
 #        BASE_DIR: /usr/src/app/
   postgres:
-    build: ./postgres
+    image: postgres:15.2
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - PSOTGRES_PASSWORD=${PSOTGRES_PASSWORD}
+      - PSOTGRES_USER=${PSOTGRES_USER}
+      - PSOTGRES_DB=${PSOTGRES_DB}
     ports:
         - "127.0.0.1:5431:5432"
     env_file:
