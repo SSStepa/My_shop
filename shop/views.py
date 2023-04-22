@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.views import generic
-from .models import Product, Cotegory
+from .models import Product, Category
 from django.core.paginator import Paginator 
 
 #class IndexView(generic.ListView):
@@ -16,7 +16,7 @@ def index(request, cotegory_id = None):
         product = Product.objects.all()
         cotegories = None
     else:
-        cotegory = get_object_or_404(Cotegory, id=cotegory_id)
+        cotegory = get_object_or_404(Category, id=cotegory_id)
         cotegories = find_cotegory(cotegory, [])
         product = get_list_or_404(Product, cotegory=cotegory)
     products = findeing_sons(cotegory_id)
@@ -25,19 +25,19 @@ def index(request, cotegory_id = None):
     product_paginator = Paginator(product, 1)
     page_number = request.GET.get('page')
     page = product_paginator.get_page(page_number)
-    return render(request, "shop/index.html", {'page': page, 'cotegories': Cotegory.objects.all(), 'cotegories_breadcrumb': cotegories})
+    return render(request, "shop/index.html", {'page': page, 'cotegories': Category.objects.all(), 'cotegories_breadcrumb': cotegories})
    
 
 def detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cotegories = find_cotegory(product.cotegory, [])
-    return render(request, "shop/detail.html", {'product': product, 'cotegories': Cotegory.objects.all(), 'cotegories_breadcrumb': cotegories})
+    return render(request, "shop/detail.html", {'product': product, 'cotegories': Category.objects.all(), 'cotegories_breadcrumb': cotegories})
 
 
 def findeing_sons(cotegory_id, products=None):
     if products == None:
         products = []
-    cotegory = Cotegory.objects._mptt_filter(parent_id=cotegory_id)
+    cotegory = Category.objects._mptt_filter(parent_id=cotegory_id)
     if cotegory:
         for i in cotegory:
             product = Product.objects.filter(cotegory=i)
