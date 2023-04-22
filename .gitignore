@@ -12,6 +12,6 @@ dist/
 build/
 *.egg-info/
 files/
-migrations/
 node_modules/
 .env
+/.idea

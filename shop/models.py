@@ -18,4 +18,3 @@ class Product(models.Model):
     cast = models.CharField(max_length=50, null=True, blank=True)
     time = models.FloatField(null=True, blank=True)
     img = models.ImageField(upload_to='./images', null=True, blank=True)
-
