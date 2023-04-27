@@ -56,7 +56,7 @@ def findeing_sons(cotegory_id, products=None):
     cotegory = Category.objects._mptt_filter(parent_id=cotegory_id)
     if cotegory:
         for i in cotegory:
-            product = Product.objects.filter(cotegory=i)
+            product = Product.objects.filter(category=i)
             for i in product:
                 products.append(i)
             findeing_sons(i.id, products)
