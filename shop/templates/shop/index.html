@@ -12,9 +12,9 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
-                    {% if cotegories_breadcrumb %}
-                        {% for cotegory in cotegories_breadcrumb %}
-                            <li class="breadcrumb-item"><a href="{% url 'shop:index' cotegory_id=cotegory.id %}">{{ cotegory.name }}</a></li>
+                    {% if categories_breadcrumb %}
+                        {% for category in categories_breadcrumb %}
+                            <li class="breadcrumb-item"><a href="{% url 'shop:index' category_id=category.id %}">{{ category.name }}</a></li>
                         {% endfor %} 
                     {% endif %}
                 </ol>
@@ -37,9 +37,9 @@
                               </li>
                               <li>
                                 <ul>
-                                    {% recursetree cotegories %}
+                                    {% recursetree categories %}
                                         <li>
-                                            <a href="{% url 'shop:index' cotegory_id=node.id %}" class="nav-link text-white">
+                                            <a href="{% url 'shop:index' category_id=node.id %}" class="nav-link text-white">
                                                 {{ node.name }}
                                             </a>
                                             {% if not node.is_leaf_node %}
@@ -50,7 +50,6 @@
                                         </li>
                                     {% endrecursetree %}
                                 </ul>
-                                </a>
                               </li>
                             </ul>
                         </div>
@@ -71,7 +70,7 @@
                                         <li><strong>Description:</strong> {{ product.description }}</li>
                                     </ul>
                                 </p>
-                                <a href="{% url 'shop:detail' product_id=product.id %}" class="btn btn-primary">More infarmation</a>
+                                <a href="{% url 'shop:detail' product_id=product.id %}" class="btn btn-primary">More information</a>
                             </div>
                         </div><br>
                     {% endfor %}

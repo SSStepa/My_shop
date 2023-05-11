@@ -1,8 +1,17 @@
 from django.core.paginator import Paginator
-from django.shortcuts import get_list_or_404, get_object_or_404, render
-from django.views import generic
+from django.shortcuts import (
+    get_list_or_404,
+    get_object_or_404,
+    render,
+)
 
-from .models import Category, Product
+from .models import (
+    Category,
+    Product,
+)
+
+# from django.views import generic
+
 
 # class IndexView(generic.ListView):
 #    template_name = 'shop/index.html'
@@ -11,15 +20,15 @@ from .models import Category, Product
 #    paginate_by = 5
 
 
-def index(request, cotegory_id=None):
-    if cotegory_id == None:
+def index(request, category_id=None):
+    if category_id is None:
         product = Product.objects.all()
-        cotegories = None
+        categories = None
     else:
-        cotegory = get_object_or_404(Category, id=cotegory_id)
-        cotegories = find_cotegory(cotegory, [])
-        product = get_list_or_404(Product, cotegory=cotegory)
-    products = findeing_sons(cotegory_id)
+        category = get_object_or_404(Category, id=category_id)
+        categories = find_category(category, [])
+        product = get_list_or_404(Product, cotegory=category)
+    products = finding_sons(category_id)
     for i in product:
         products.append(i)
     product_paginator = Paginator(product, 1)
@@ -30,41 +39,41 @@ def index(request, cotegory_id=None):
         "shop/index.html",
         {
             "page": page,
-            "cotegories": Category.objects.all(),
-            "cotegories_breadcrumb": cotegories,
+            "categories": Category.objects.all(),
+            "categories_breadcrumb": categories,
         },
     )
 
 
 def detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    cotegories = find_cotegory(product.cotegory, [])
+    categories = find_category(product.cotegory, [])
     return render(
         request,
         "shop/detail.html",
         {
             "product": product,
-            "cotegories": Category.objects.all(),
-            "cotegories_breadcrumb": cotegories,
+            "categories": Category.objects.all(),
+            "categories_breadcrumb": categories,
         },
     )
 
 
-def findeing_sons(cotegory_id, products=None):
-    if products == None:
+def finding_sons(category_id, products=None):
+    if products is None:
         products = []
-    cotegory = Category.objects._mptt_filter(parent_id=cotegory_id)
-    if cotegory:
-        for i in cotegory:
+    category = Category.objects._mptt_filter(parent_id=category_id)
+    if category:
+        for i in category:
             product = Product.objects.filter(category=i)
-            for i in product:
-                products.append(i)
-            findeing_sons(i.id, products)
+            for x in product:
+                products.append(x)
+            finding_sons(i.id, products)
     return products
 
 
-def find_cotegory(cotegory, cotegories):
-    if cotegory.parent:
-        cotegories = find_cotegory(cotegory.parent, cotegories)
-    cotegories.append(cotegory)
-    return cotegories
+def find_category(category, categories):
+    if category.parent:
+        categories = find_category(category.parent, categories)
+    categories.append(category)
+    return categories

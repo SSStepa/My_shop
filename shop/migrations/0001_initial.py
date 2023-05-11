@@ -6,40 +6,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Cotegory',
+            name="Cotegory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('type', models.CharField(max_length=50, null=True)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='shop.cotegory')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=50)),
+                ("type", models.CharField(max_length=50, null=True)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="children",
+                        to="shop.cotegory",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('price', models.FloatField(blank=True, null=True)),
-                ('description', models.TextField(null=True)),
-                ('cast', models.CharField(blank=True, max_length=50, null=True)),
-                ('time', models.FloatField(blank=True, null=True)),
-                ('img', models.ImageField(blank=True, null=True, upload_to='./images')),
-                ('cotegory', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='shop.cotegory')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=50)),
+                ("price", models.FloatField(blank=True, null=True)),
+                ("description", models.TextField(null=True)),
+                ("cast", models.CharField(blank=True, max_length=50, null=True)),
+                ("time", models.FloatField(blank=True, null=True)),
+                ("img", models.ImageField(blank=True, null=True, upload_to="./images")),
+                (
+                    "cotegory",
+                    models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="shop.cotegory"),
+                ),
             ],
         ),
     ]

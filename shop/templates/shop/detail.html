@@ -13,9 +13,9 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
-                    {% if cotegories_breadcrumb %}
-                        {% for cotegory in cotegories_breadcrumb %}
-                            <li class="breadcrumb-item"><a href="{% url 'shop:index' cotegory_id=cotegory.id %}">{{ cotegory.name }}</a></li>
+                    {% if categories_breadcrumb %}
+                        {% for category in categories_breadcrumb %}
+                            <li class="breadcrumb-item"><a href="{% url 'shop:index' category_id=category.id %}">{{ category.name }}</a></li>
                         {% endfor %} 
                     {% endif %}
                 </ol>
@@ -36,21 +36,20 @@
                             </a>
                             </li>
                             <li>
-                            <ul>
-                                {% recursetree cotegories %}
-                                    <li>
-                                        <a href="{% url 'shop:index' cotegory_id=node.id %}" class="nav-link text-white">
-                                            {{ node.name }}
-                                        </a>
-                                        {% if not node.is_leaf_node %}
-                                            <ul class="children">
-                                                {{ children }}
-                                            </ul>
-                                        {% endif %}
-                                    </li>
-                                {% endrecursetree %}
-                            </ul>
-                            </a>
+                                <ul>
+                                    {% recursetree categories %}
+                                        <li>
+                                            <a href="{% url 'shop:index' category_id=node.id %}" class="nav-link text-white">
+                                                {{ node.name }}
+                                            </a>
+                                            {% if not node.is_leaf_node %}
+                                                <ul class="children">
+                                                    {{ children }}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endrecursetree %}
+                                </ul>
                             </li>
                         </ul>
                     </div>

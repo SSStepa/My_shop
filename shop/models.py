@@ -1,12 +1,13 @@
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
+from mptt.models import (
+    MPTTModel,
+    TreeForeignKey,
+)
 
 
 class Category(MPTTModel, models.Model):
     name = models.CharField(max_length=50)
-    parent = TreeForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
-    )
+    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     type = models.CharField(max_length=50, null=True)
 
     class MPTTMeta:
