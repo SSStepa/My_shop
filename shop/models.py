@@ -89,12 +89,18 @@ class CategoryModel(MPTTModel, models.Model):
     class MPTTMeta:
         order_insertion_by = ["type", "name"]
 
+    def __str__(self):
+        return f"{self.pk}. {self.name}"
+
 
 class ProductModel(models.Model):
     name = models.CharField(max_length=50)
     price = models.FloatField(null=True, blank=True)
-    category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     description = models.TextField(null=True)
     cast = models.CharField(max_length=50, null=True, blank=True)
     time = models.FloatField(null=True, blank=True)
-    img = models.ImageField(upload_to="./images", null=True, blank=True)
+    img = models.ImageField(upload_to="./images")
+
+    def __str__(self):
+        return f"{self.pk}. {self.name}"

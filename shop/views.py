@@ -24,16 +24,23 @@ def index(request, category_id=None):
     if category_id is None:
         product = ProductModel.objects.all()
         categories = None
+        products_find = True
     else:
         category = get_object_or_404(CategoryModel, id=category_id)
         categories = find_category(category, [])
-        product = get_list_or_404(ProductModel, category=category)
-    products = finding_sons(category_id)
-    for i in product:
-        products.append(i)
-    product_paginator = Paginator(product, 1)
-    page_number = request.GET.get("page")
-    page = product_paginator.get_page(page_number)
+        try:
+            product = get_list_or_404(ProductModel, category=category)
+            products_find = True
+        except:
+            page = None
+            products_find = False
+    if products_find:
+        products = finding_sons(category_id)
+        for i in product:
+            products.append(i)
+        product_paginator = Paginator(product, 1)
+        page_number = request.GET.get("page")
+        page = product_paginator.get_page(page_number)
     return render(
         request,
         "shop/index.html",
@@ -47,7 +54,7 @@ def index(request, category_id=None):
 
 def detail(request, product_id):
     product = get_object_or_404(ProductModel, id=product_id)
-    categories = find_category(product.cotegory, [])
+    categories = find_category(product.category, [])
     return render(
         request,
         "shop/detail.html",
