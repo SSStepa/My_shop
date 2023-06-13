@@ -1,0 +1,10 @@
+{% block context %}
+<h1>{{title}}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Register</button>
+</form>
+
+{% endblock %}
