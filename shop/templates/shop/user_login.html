@@ -1,4 +1,9 @@
-{% block context %}
+{% extends 'shop/base.html' %}
+{% block user_options %}
+{%endblock user_options %}
+{% block side_menu %}
+{%endblock side_menu %}
+{% block content %}
 <h1>{{title}}</h1>
 
 <form method="POST">
@@ -7,4 +12,4 @@
     <button type="submit" class="save btn btn-default">Register</button>
 </form>
 
-{% endblock %}
+{% endblock content %}

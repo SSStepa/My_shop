@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load mptt_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+</head>
+<body>
+{% block menu %}
+<br>
+<div class="container-fluid">
+    <div class="container">
+    </div>
+    <br>
+    <div class="container">
+        {% block user_options %}
+        <a href="{% url 'shop:user_register' %}">Sing up</a>
+        <a href="{% url 'shop:user_login' %}">Sing in</a>
+        {% endblock user_options %}
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+                {% if categories_breadcrumb %}
+                {% for category in categories_breadcrumb %}
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' category_id=category.id %}">{{ category.name }}</a></li>
+                {% endfor %}
+                {% endif %}
+            </ol>
+        </nav>
+    </div>
+    <br>
+</div>
+<br>
+{% endblock menu %}
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            {% block side_menu %}
+            <div class="col-sm-4">
+                <aside class="bd-sidebar">
+                    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+                         style="width: 280px; background-color:rgb(53, 47, 47);">
+                        <ul class="nav nav-pills flex-column sm-auto">
+                            <li class="nav-item">
+                                <a href="{% url 'shop:home' %}" class="nav-link text-white" aria-current="page">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <ul>
+                                    {% recursetree categories %}
+                                    <li>
+                                        <a href="{% url 'shop:index' category_id=node.id %}"
+                                           class="nav-link text-white">
+                                            {{ node.name }}
+                                        </a>
+                                        {% if not node.is_leaf_node %}
+                                        <ul class="children">
+                                            {{ children }}
+                                        </ul>
+                                        {% endif %}
+                                    </li>
+                                    {% endrecursetree %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+            {% endblock side_menu %}
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{% block footer %}
+<div class="container-fluid">
+    <h1>footer</h1>
+</div>
+{% endblock footer %}
+</body>
+</html>
