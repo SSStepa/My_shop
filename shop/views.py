@@ -1,6 +1,4 @@
-from django.contrib.auth.forms import (
-    AuthenticationForm,
-)
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -11,65 +9,58 @@ from django.shortcuts import (
     render,
 )
 from django.urls import reverse_lazy
-# from django.views import generic
+from django.views import generic
 from django.views.generic import CreateView
+
 from .forms import UserForm
 from .models import (
     CategoryModel,
     ProductModel,
 )
 
-# class IndexView(generic.ListView):
-#     template_name = 'shop/index.html'
-#     context_object_name = 'page_list'
-#     model = ProductModel, CategoryModel
-#     paginate_by = 5
+
+class IndexView(generic.ListView):
+    model = ProductModel
+    template_name = "shop/index.html"
+    context_object_name = "products"
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = CategoryModel.objects.all()
+        context["categories_breadcrumbs"] = None
+        return context
 
 
-def index(request, category_id=None):
-    if category_id is None:
-        product = ProductModel.objects.all()
-        categories = None
-        products_find = True
-    else:
-        category = get_object_or_404(CategoryModel, id=category_id)
-        categories = find_category(category, [])
-        try:
-            product = get_list_or_404(ProductModel, category=category)
-            products_find = True
-        except Http404:
-            page = None
-            products_find = False
-    if products_find:
-        products = finding_sons(category_id)
-        for i in product:
-            products.append(i)
-        product_paginator = Paginator(product, 1)
-        page_number = request.GET.get("page")
-        page = product_paginator.get_page(page_number)
-    return render(
-        request,
-        "shop/index.html",
-        {
-            "page": page,
-            "categories": CategoryModel.objects.all(),
-            "categories_breadcrumb": categories,
-        },
-    )
+class IndexCategoryView(generic.ListView):
+    model = ProductModel
+    template_name = "shop/index.html"
+    context_object_name = "products"
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = CategoryModel.objects.all()
+        category = get_object_or_404(CategoryModel, id=self.kwargs["category_id"])
+        context["categories_breadcrumb"] = find_category(category, [])
+        return context
+
+    def get_queryset(self):
+        return ProductModel.objects.filter(category__id=self.kwargs["category_id"])
 
 
-def detail(request, product_id):
-    product = get_object_or_404(ProductModel, id=product_id)
-    categories = find_category(product.category, [])
-    return render(
-        request,
-        "shop/detail.html",
-        {
-            "product": product,
-            "categories": CategoryModel.objects.all(),
-            "categories_breadcrumb": categories,
-        },
-    )
+class DetailProductView(generic.DetailView):
+    model = ProductModel
+    template_name = "shop/detail.html"
+    pk_url_kwarg = "product_id"
+    context_object_name = "product"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = CategoryModel.objects.all()
+        product = get_object_or_404(ProductModel, id=self.kwargs["product_id"])
+        context["categories_breadcrumb"] = find_category(product.category, [])
+        return context
 
 
 def finding_sons(category_id, products=None):

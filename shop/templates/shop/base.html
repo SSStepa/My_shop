@@ -24,6 +24,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
                 {% if categories_breadcrumb %}
+
                 {% for category in categories_breadcrumb %}
                 <li class="breadcrumb-item"><a href="{% url 'shop:index' category_id=category.id %}">{{ category.name }}</a></li>
                 {% endfor %}

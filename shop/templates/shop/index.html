@@ -1,8 +1,8 @@
 {% extends 'shop/base.html' %}
 
 {% block content %}
-    {% if page %}
-    {% for product in page.object_list %}
+    {% if products %}
+    {% for product in products %}
     <div class="card" style="width: 30rem; background-color: rgb(215, 240, 240);">
         <img src="{{ product.img.url }}" class="card-img-top" height="300" alt="No image">
         <div class="card-body">

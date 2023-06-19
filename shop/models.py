@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from mptt.models import (
@@ -104,3 +105,15 @@ class ProductModel(models.Model):
 
     def __str__(self):
         return f"{self.pk}. {self.name}"
+
+    def get_absolute_url(self):
+        return reverse("shop:detail", kwargs={"product_id": self.pk})
+
+
+class BlockedIPModel(models.Model):
+    ip_name = models.CharField(max_length=25)
+
+
+class URLFromModel(models.Model):
+    url_from = models.URLField()
+    now_url = models.URLField()
