@@ -20,6 +20,7 @@ from .models import (
 
 
 class IndexView(generic.ListView):
+    paginate_by = 1
     model = ProductModel
     template_name = "shop/index.html"
     context_object_name = "products"
@@ -33,6 +34,7 @@ class IndexView(generic.ListView):
 
 
 class IndexCategoryView(generic.ListView):
+    paginate_by = 1
     model = ProductModel
     template_name = "shop/index.html"
     context_object_name = "products"
@@ -83,7 +85,7 @@ def find_category(category, categories):
     return categories
 
 
-class LoginUser(LoginView):
+class LoginUserView(LoginView):
     form_class = AuthenticationForm
     template_name = "shop/user_login.html"
 
@@ -95,7 +97,7 @@ class LoginUser(LoginView):
         return reverse_lazy("shop:home")
 
 
-class RegisterUser(CreateView):
+class RegisterUserView(CreateView):
     form_class = UserForm
     template_name = "shop/user_register.html"
     success_url = reverse_lazy("shop:user_login")
