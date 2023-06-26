@@ -9,4 +9,5 @@ urlpatterns = [
     path("detail/<int:product_id>/", views.DetailProductView.as_view(), name="detail"),
     path("user/sing_up/", views.RegisterUserView.as_view(), name="user_register"),
     path("user/sing_in/", views.LoginUserView.as_view(), name="user_login"),
+    path("user/sing_out/", views.user_logout_view, name="user_logout"),
 ]

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -17,14 +18,19 @@
     <br>
     <div class="container">
         {% block user_options %}
-        <a href="{% url 'shop:user_register' %}">Sing up</a>
-        <a href="{% url 'shop:user_login' %}">Sing in</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'shop:user_logout' %}">Sing out</a>
+        {% else %}
+            <a href="{% url 'shop:user_register' %}">Sing up</a>
+            <a href="{% url 'shop:user_login' %}">Sing in</a>
+        {% endif %}
         {% endblock user_options %}
+        <a class="btn btn-success" href="{% url 'shop:user_register' %}">Basket</a>
+        <a href="{% url 'shop:home' %}"><div class="logo"></div></a>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
                 {% if categories_breadcrumb %}
-
                 {% for category in categories_breadcrumb %}
                 <li class="breadcrumb-item"><a href="{% url 'shop:index' category_id=category.id %}">{{ category.name }}</a></li>
                 {% endfor %}

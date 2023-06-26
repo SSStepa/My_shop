@@ -15,8 +15,10 @@
                     <li><strong>Description:</strong> {{ product.description }}</li>
                 </ul>
             </p>
-            <a href="{% url 'shop:detail' product_id=product.id %}" class="btn btn-primary">More
-                information</a>
+            <p>
+            <a href="{% url 'shop:detail' product_id=product.id %}" class="btn btn-primary">More information</a>
+            <a href="#" class="btn btn-success">BUY</a>
+            </p>
         </div>
     </div>
     <br>

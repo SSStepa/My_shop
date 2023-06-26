@@ -11,9 +11,8 @@ class BlockingIPMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        blocked_ips = BlockedIPModel.objects.all()
         ip = request.META.get("REMOTE_ADDR")
-        if ip in blocked_ips:
+        if BlockedIPModel.objects.filter(ip_name=ip).exists():
             raise PermissionDenied
         response = self.get_response(request)
         return response
@@ -25,9 +24,9 @@ class RecordingURLMiddleware:
 
     def __call__(self, request):
         url_from = request.META.get("HTTP_REFERER")
-        now_url = request.META.get("HTTP_HOST")
-        if url_from is not None and now_url is not None:
-            info = URLFromModel(url_from=url_from, now_url=now_url)
+        url_to = request.META.get("HTTP_HOST")
+        if url_from is not None and url_to is not None:
+            info = URLFromModel(url_from=url_from, url_to=url_to)
             info.save()
         response = self.get_response(request)
         return response

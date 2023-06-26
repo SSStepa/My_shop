@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
@@ -24,7 +25,6 @@ class IndexView(generic.ListView):
     model = ProductModel
     template_name = "shop/index.html"
     context_object_name = "products"
-    allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,7 +38,6 @@ class IndexCategoryView(generic.ListView):
     model = ProductModel
     template_name = "shop/index.html"
     context_object_name = "products"
-    allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -105,3 +104,8 @@ class RegisterUserView(CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         return dict(list(context.items()))
+
+
+def user_logout_view(request):
+    logout(request)
+    return redirect('shop:home')

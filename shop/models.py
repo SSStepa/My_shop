@@ -115,5 +115,5 @@ class BlockedIPModel(models.Model):
 
 
 class URLFromModel(models.Model):
-    url_from = models.URLField()
-    now_url = models.URLField()
+    url_from = models.URLField(help_text="url, from which you are going")
+    url_to = models.URLField(help_text="url, which you are going to visit")
