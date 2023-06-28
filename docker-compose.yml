@@ -2,6 +2,7 @@ version: "3.8"
 volumes:
   postgres_data:
     external: false
+  staticdata:
 services:
   app:
     build:
@@ -37,3 +38,14 @@ services:
         - "127.0.0.1:5431:5432"
     env_file:
         - .env
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d
+      - staticdata:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+      - postgres
