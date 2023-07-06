@@ -8,7 +8,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python ./manage.py runserver 0.0.0.0:8000
+    command: uwsgi --ini uwsgi.ini
+#    command: python ./manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
     env_file:
@@ -20,6 +21,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/usr/src/app:rw
+      - staticdata:/usr/src/app/static
 
 #      args:
 #        DEBIAN_FRONTEND: noninteractive
